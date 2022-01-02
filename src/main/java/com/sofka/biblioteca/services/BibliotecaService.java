@@ -49,4 +49,11 @@ public class BibliotecaService {
     public Flux<Recurso> recomendarPorTipo(String tipo) {
         return repository.findByTipo(tipo);
     }
+
+    public String devolverRecurso(String id) {
+        Recurso recurso = repository.findById(id).block();
+        recurso.setPrestado(false);
+        repository.save(recurso);
+        return "Devuelto " + new Date();
+    }
 }

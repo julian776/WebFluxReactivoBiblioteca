@@ -37,9 +37,14 @@ public class Controller {
         return ResponseEntity.ok(recursoAgregado.block());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/prestar/{id}")
     public ResponseEntity<String> prestarRecurso(@PathVariable("id") String id){
         return new ResponseEntity(service.prestarRecurso(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/devolver/{id}")
+    public ResponseEntity<String> devolverRecurso(@PathVariable("id") String id){
+        return new ResponseEntity<>(service.devolverRecurso(id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -49,12 +54,6 @@ public class Controller {
 
     @GetMapping("/recomendaciones/{tipo}")
     public Flux<Recurso> recomendar(@PathVariable("tipo") String tipo){
-        var answer = service.recomendarPorTipo(tipo);
-        /*
-        if(answer == null){
-            ResponseEntity.notFound().build();
-        }
-         */
-        return answer;
+        return service.recomendarPorTipo(tipo);
     }
 }
