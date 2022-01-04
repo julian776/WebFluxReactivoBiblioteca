@@ -27,11 +27,9 @@ public class BibliotecaService {
         }).block();
     }
 
-    public Object prestarRecurso(String id) {
-        Recurso recurso = repository.findById(id).block();
-        recurso.setPrestado(true);
-        repository.save(recurso);
-        return "Prestado " + new Date();
+    public Mono<Recurso> prestarRecurso(String id) {
+        var recurso = repository.findById(id).block();
+        return repository.save(recurso);
     }
 
     public Object eliminarRecurso(String id) {
