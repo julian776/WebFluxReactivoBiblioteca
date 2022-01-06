@@ -43,8 +43,9 @@ public class Recurso {
         return tipo;
     }
 
-    public void setPrestado(boolean prestado) {
-        isPrestado = prestado;
+    public Recurso setPrestado(boolean prestado) {
+        this.isPrestado = prestado;
+        return this;
     }
 
     public void setFechaSalida(String fechaSalida) {

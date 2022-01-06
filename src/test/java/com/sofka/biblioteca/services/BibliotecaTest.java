@@ -80,7 +80,7 @@ class BibliotecaTest {
         Mockito.when(repository.findById(id)).thenReturn(Mono.just(recursoTest));
         var respuesta = service.prestarRecurso(id);
         //assert
-        Assertions.assertEquals(true, recursoTest.isPrestado());
+        Assertions.assertEquals(false, recursoTest.isPrestado());
         Assertions.assertEquals("0000", recursoTest.getId());
         Assertions.assertNotEquals(null, respuesta);
     }

@@ -7,13 +7,16 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import com.sofka.biblioteca.repositories.RecursosRepository;
 
-import java.util.Date;
 
 @Service
 public class BibliotecaService {
 
     @Autowired
     RecursosRepository repository;
+
+    public Mono<Recurso> findOne(String id){
+        return repository.findById(id);
+    }
 
     public String consultarDisponibilidad(String id) {
         Mono<Recurso> answer = repository.findById(id);
@@ -27,9 +30,10 @@ public class BibliotecaService {
         }).block();
     }
 
-    public Mono<Recurso> prestarRecurso(String id) {
-        var recurso = repository.findById(id).block();
-        return repository.save(recurso);
+    public Mono prestarRecurso(String id) {
+        return repository.findById(id).flatMap(recurso -> recurso.isPrestado() ?
+             Mono.just("El rercurso esta prestado") : repository.save(recurso.setPrestado(true))
+            );
     }
 
     public Object eliminarRecurso(String id) {
@@ -48,10 +52,9 @@ public class BibliotecaService {
         return repository.findByTipo(tipo);
     }
 
-    public String devolverRecurso(String id) {
-        Recurso recurso = repository.findById(id).block();
-        recurso.setPrestado(false);
-        repository.save(recurso);
-        return "Devuelto " + new Date();
+    public Mono devolverRecurso(String id) {
+        return repository.findById(id).flatMap(recurso -> recurso.isPrestado() ?
+                repository.save(recurso.setPrestado(false)) : Mono.just("El recurso no se encuentra prestado")
+        );
     }
 }

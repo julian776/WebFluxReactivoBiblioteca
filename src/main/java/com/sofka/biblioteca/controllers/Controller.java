@@ -6,8 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @CrossOrigin("*")
@@ -16,8 +17,6 @@ public class Controller {
 
     @Autowired
     BibliotecaService service;
-
-
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<String> isDisponile(@PathVariable("id") String id){
@@ -40,13 +39,13 @@ public class Controller {
     }
 
     @PutMapping("/prestar/{id}")
-    public ResponseEntity<String> prestarRecurso(@PathVariable("id") String id){
-        return new ResponseEntity(service.prestarRecurso(id), HttpStatus.OK);
+    public Mono prestarRecurso(@PathVariable("id") String id){
+        return service.prestarRecurso(id);
     }
 
     @PutMapping("/devolver/{id}")
-    public ResponseEntity<String> devolverRecurso(@PathVariable("id") String id){
-        return new ResponseEntity<>(service.devolverRecurso(id), HttpStatus.OK);
+    public Mono devolverRecurso(@PathVariable("id") String id){
+        return service.devolverRecurso(id);
     }
 
     @DeleteMapping("/{id}")
